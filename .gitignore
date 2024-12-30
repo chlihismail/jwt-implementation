@@ -1,0 +1,41 @@
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Spring Boot 
+*.class
+target/
+*.war
+*.ear
+*.jar
+.idea/
+*.iml
+.vscode/
+*.project
+.classpath
+.settings/
+*.factorypath
+build/
+.env
+application.properties
+application.yml
+application-*.properties
+application-*.yml
+
+# React 
+node_modules/
+build/
+dist/
+bower_components/
+.env
+.env.local
+.env.*.local
+
+# Git
+*.orig

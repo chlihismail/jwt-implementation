@@ -1,18 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SubmitButton from "../components/common/buttons/SubmitButton";
 import EmailInput from "../components/common/inputs/EmailInput";
 import PasswordInput from "../components/common/inputs/PasswordInput";
 import CheckboxInput from "../components/common/inputs/CheckboxInput";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [rememberMe, setRememberMe] = useState<boolean>(false);
+    const [loginError, setLoginError] = useState<boolean>(false);
+    const { login } = useContext(AuthContext)!;
     const [loading, setLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+
+        try{
+            const response = await axios.post("http://localhost:8080/api/users/login", {
+                email,
+                password
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+            });
+
+            const data = response.data;
+            if(data.token && data.role){
+                login(data.token, data.role);
+                navigate("/")
+            } else{
+                console.error("Login failed!!");
+                setLoginError(true);
+            }
+        } catch(error) {
+            console.error(error);
+            setLoginError(true);
+        } finally {
+            setLoading(false);
+        }
     }
     const handleEmail = (value: string ) => {
         setEmail(value);
@@ -52,11 +83,12 @@ const Login: React.FC = () => {
                             Forgot Password?
                         </a>
                     </div>
-                    <div className="mb-4">
+                   <div className="mb-4">
                         <SubmitButton
                             label={loading ? "Signing in..." : "Sign in"}
                         />
                     </div>
+                    {loginError && <h1 className="w-full m-auto rounded bg-red-700 text-white text-sm text-center font-medium p-1.5"> Login Failed! </h1> }
                 </form>
 
             </div>

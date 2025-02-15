@@ -44,7 +44,7 @@ public class AppUserAuthenticationProvider{
         if(rememberMe){
             validity = now.plus(30, ChronoUnit.DAYS);
         }else{
-            validity = now.plus(1, ChronoUnit.HOURS);
+            validity = now.plus(10, ChronoUnit.SECONDS);
         }
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);

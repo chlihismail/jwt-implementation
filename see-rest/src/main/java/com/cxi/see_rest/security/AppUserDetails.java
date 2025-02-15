@@ -1,6 +1,6 @@
 package com.cxi.see_rest.security;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -30,7 +30,7 @@ public class AppUserDetails implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return appUser.getAccountExpiryDate() == null || appUser.getAccountExpiryDate().isAfter(LocalDateTime.now());
+        return appUser.getAccountExpiryDate() == null || appUser.getAccountExpiryDate().isAfter(Instant.now());
     }
     @Override
     public boolean isAccountNonLocked() {
@@ -38,7 +38,7 @@ public class AppUserDetails implements UserDetails{
     }
     @Override
     public boolean isCredentialsNonExpired() {
-        return appUser.getPasswordExpiryDate() == null || appUser.getPasswordExpiryDate().isAfter(LocalDateTime.now());
+        return appUser.getPasswordExpiryDate() == null || appUser.getPasswordExpiryDate().isAfter(Instant.now());
     }
     @Override
     public boolean isEnabled() {

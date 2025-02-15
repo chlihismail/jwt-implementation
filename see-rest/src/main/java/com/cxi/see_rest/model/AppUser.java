@@ -1,6 +1,9 @@
 package com.cxi.see_rest.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.cxi.see_rest.enums.AppUserRole;
 
@@ -42,15 +45,15 @@ public class AppUser {
     private boolean locked = false;
 
     @Column(nullable = true)
-    private LocalDateTime accountExpiryDate;
+    private Instant accountExpiryDate;
 
     @Column(nullable = true)
-    private LocalDateTime  passwordExpiryDate;
+    private Instant  passwordExpiryDate;
 
     public AppUser() {
     }
     public AppUser(Long id, String firstname, String lastname, String email, AppUserRole role, String password, Boolean enabled,
-            Boolean locked, LocalDateTime accountExpiryDate, LocalDateTime passwordExpiryDate) {
+            Boolean locked, Instant accountExpiryDate, Instant passwordExpiryDate) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -66,10 +69,10 @@ public class AppUser {
     @PrePersist
     public void setDefaultValues(){
         if(this.accountExpiryDate == null){
-            this.accountExpiryDate = LocalDateTime.now().plusYears(1);
+            this.accountExpiryDate = ZonedDateTime.now(ZoneId.of("UTC")).plus(5, ChronoUnit.YEARS).toInstant();
         }
         if(this.passwordExpiryDate == null){
-            this.passwordExpiryDate = LocalDateTime.now().plusMonths(1);
+            this.passwordExpiryDate = ZonedDateTime.now(ZoneId.of("UTC")).plus(5, ChronoUnit.YEARS).toInstant();
         }
     }
 
@@ -117,16 +120,16 @@ public class AppUser {
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
-    public LocalDateTime getAccountExpiryDate() {
+    public Instant getAccountExpiryDate() {
         return accountExpiryDate;
     }
-    public void setAccountExpiryDate(LocalDateTime accountExpiryDate) {
+    public void setAccountExpiryDate(Instant accountExpiryDate) {
         this.accountExpiryDate = accountExpiryDate;
     }
-    public LocalDateTime getPasswordExpiryDate() {
+    public Instant getPasswordExpiryDate() {
         return passwordExpiryDate;
     }
-    public void setPasswordExpiryDate(LocalDateTime passwordExpiryDate) {
+    public void setPasswordExpiryDate(Instant passwordExpiryDate) {
         this.passwordExpiryDate = passwordExpiryDate;
     }
     @Override

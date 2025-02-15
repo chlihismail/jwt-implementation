@@ -1,10 +1,11 @@
 package com.cxi.see_rest.security;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.cxi.see_rest.exception.AppException;
 
 import jakarta.annotation.PostConstruct;
 
@@ -34,9 +37,15 @@ public class AppUserAuthenticationProvider{
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String email){
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600000);
+    public String createToken(String email, boolean rememberMe){
+        Instant now = Instant.now();
+        Instant validity;
+
+        if(rememberMe){
+            validity = now.plus(30, ChronoUnit.DAYS);
+        }else{
+            validity = now.plus(1, ChronoUnit.HOURS);
+        }
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
@@ -47,14 +56,21 @@ public class AppUserAuthenticationProvider{
     }
 
     public Authentication validateToken(String token){
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        
-        DecodedJWT decoded = verifier.verify(token);
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        UserDetails appUser = appUserDetailsService.loadUserByUsername(decoded.getSubject());
+            JWTVerifier verifier = JWT.require(algorithm).build();
 
-        return new UsernamePasswordAuthenticationToken(appUser, null, Collections.emptyList());
+            DecodedJWT decoded = verifier.verify(token);
+
+            UserDetails appUser = appUserDetailsService.loadUserByUsername(decoded.getSubject());
+
+            return new UsernamePasswordAuthenticationToken(appUser, null, appUser.getAuthorities());
+
+        }catch(JWTVerificationException ex){
+            throw new AppException("Invalid token", HttpStatus.BAD_REQUEST);
+        }catch(Exception ex){
+            throw new AppException("Authentication failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

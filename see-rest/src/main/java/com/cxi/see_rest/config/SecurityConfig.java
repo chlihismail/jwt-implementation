@@ -21,7 +21,7 @@ public class SecurityConfig{
     private final AppUserAuthenticationProvider appUserAuthenticationProvider;
 
     public SecurityConfig(AppUserAuthenticationEntryPoint appUserAuthenticationEntryPoint,
-            AppUserAuthenticationProvider appUserAuthenticationProvider) {
+        AppUserAuthenticationProvider appUserAuthenticationProvider) {
         this.appUserAuthenticationEntryPoint = appUserAuthenticationEntryPoint;
         this.appUserAuthenticationProvider = appUserAuthenticationProvider;
     }
@@ -36,7 +36,7 @@ public class SecurityConfig{
             .securityMatcher("/api/**")
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.GET, "/api/home").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/users/login", "/api/users/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users/login", "/api/users/register", "/api/users/forget-password", "api/users/reset-password").permitAll()
                 // .requestMatchers("/admin/**").hasRole("ADMIN")
                 // .requestMatchers("/user/**").hasRole("USER")
                 .anyRequest().authenticated())

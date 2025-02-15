@@ -4,6 +4,7 @@ import com.cxi.see_rest.enums.AppUserRole;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record SignUpDto(
@@ -16,16 +17,21 @@ public record SignUpDto(
     String lastname,
     
     @NotEmpty
-    @Email
+    @Email(message = "Invalid email format")
     String email,
 
-    @NotEmpty
+    @NotNull(message = "Role is required")
     AppUserRole role,
 
-    @NotEmpty
-    @Size(min = 8, max = 100)
+    @NotEmpty()
+    @Size(min = 8, max = 50)
     char[] password
 ){
+    @Override
+    public String toString(){
+        return "SignUpDto(HIDDEN_INFO)";
+    }
+
     public static class Builder{
         private String firstname;
         private String lastname;

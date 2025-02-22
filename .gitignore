@@ -8,6 +8,11 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Ignore SSL certificate files
+*.p12
+*.crt
+*.pem
+
 # Spring Boot 
 *.class
 target/

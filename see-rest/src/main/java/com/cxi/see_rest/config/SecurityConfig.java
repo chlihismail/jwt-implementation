@@ -39,7 +39,9 @@ public class SecurityConfig{
                 .requestMatchers(HttpMethod.POST, "/api/users/login", "/api/users/register", "/api/users/forget-password", "api/users/reset-password").permitAll()
                 // .requestMatchers("/admin/**").hasRole("ADMIN")
                 // .requestMatchers("/user/**").hasRole("USER")
-                .anyRequest().authenticated())
+                .anyRequest().authenticated()
+            )
+            .requiresChannel(channel -> channel.anyRequest().requiresSecure())
         ;
 
         return http.build();

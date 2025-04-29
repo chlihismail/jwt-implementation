@@ -3,11 +3,13 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ResetPassword from "../pages/ResetPassword";
 import ForgetPassword from "../pages/ForgetPassword";
+import App from "../App";
 
 const AppRouter: React.FC = () => {
     return (
         <Router>
             <Routes>
+                <Route path="*" element={<App/>}/>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/reset-password" element={<ResetPassword/>}/>

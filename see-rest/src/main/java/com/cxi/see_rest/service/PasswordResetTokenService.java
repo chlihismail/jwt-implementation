@@ -53,7 +53,7 @@ public class PasswordResetTokenService{
         passwordResetToken.setExpiryDate(Instant.now().plus(15, ChronoUnit.MINUTES));
         passworResetTokenRepository.save(passwordResetToken);
 
-        String resetUrl = "https://cxiland.local:3000/reset-password?random=" + randomToken;
+        String resetUrl = "https://see.local/reset-password?random=" + randomToken;
         sendEmail(appUser.getEmail(), "Demande de réinitialisation de mot de passe", "Cliquez ici pour réinitialiser votre mot de passe : " + resetUrl);
     } 
 

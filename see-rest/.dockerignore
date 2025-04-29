@@ -1,0 +1,26 @@
+# Ignore Maven and Gradle build directories
+/target/
+/build/
+
+# Ignore IDE and editor files
+.idea/
+/.vscode/
+/*.iml
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore version control directories
+.git/
+/.gitignore
+
+# Ignore application dependency files if already included in the image
+*.jar
+*.war
+
+# Ignore temporary files
+*.bak
+*.swp
+*.tmp
